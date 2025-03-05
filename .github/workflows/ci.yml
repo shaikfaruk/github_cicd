@@ -39,11 +39,11 @@ jobs:
         run: flake8 --max-line-length=100
 
       - name: Run Pytest (Unit Tests)
-        run: pytest test_mail_api.py
+        run: pytest test_case.py
 
       - name: Start Flask Application
         run: |
-          python mail_api.py &
+          python email_function.py &
           sleep 5
 
 
