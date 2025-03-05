@@ -38,7 +38,8 @@ class mail(Resource):
             print("Email Sent")
             return jsonify({'Success Message': "Mail Sent successfully"})
         else:
-            Error_Message="Missing parameters.. Please check whether values for all 3 parameters are provide 'to','subject','body'"
+            Error_Message = "Missing parameters.. Please check whether values for\
+            all 3 parameters are provide 'to','subject','body'"
             return jsonify({'Error Message': Error_Message})
 
 
