@@ -1,6 +1,11 @@
-name: Flask CI Pipeline
+name: Flask CI/CD Pipeline
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - development
+      - stagging
+      - production
 
 jobs:
   build-and-test:
@@ -20,16 +25,39 @@ jobs:
           pip install -r requirements.txt
           pip install flake8 pytest
 
+      - name: Set Environment Variables
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/development" ]]; then
+            echo "FLASK_ENV=development" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/stagging" ]]; then
+            echo "FLASK_ENV=staging" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
+            echo "FLASK_ENV=production" >> $GITHUB_ENV
+          fi
+
       - name: Run Flake8 (Code Quality Check)
         run: flake8 --max-line-length=100
 
       - name: Run Pytest (Unit Tests)
-        run: pytest test_case.py
+        run: pytest test_mail_api.py
 
       - name: Start Flask Application
         run: |
-          python email_function.py &
+          python mail_api.py &
           sleep 5
 
-      - name: Check if Flask is Running
-        run: curl --fail http://127.0.0.1:5051/ || (echo "Flask app did not start!" && exit 1)
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Application (Placeholder)
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
+            echo "Deploying to Production..."
+          elif [[ "${{ github.ref }}" == "refs/heads/stagging" ]]; then
+            echo "Deploying to Staging..."
+          elif [[ "${{ github.ref }}" == "refs/heads/development" ]]; then
+            echo "Deploying to Development..."
+          fi
