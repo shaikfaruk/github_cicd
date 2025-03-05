@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch
-from email_funcation import app  # Import the Flask mail API
+from github_cicd.email_function import app  # Import the Flask mail API
 
 
 @pytest.fixture
